@@ -17,6 +17,7 @@
     "eslint": "^4.19.1",
     "import-glob-loader": "^1.1.0",
     "node-sass": "^4.9.0",
+    "prop-types": "^15.6.2",
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "react-google-maps": "^9.4.5",

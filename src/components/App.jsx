@@ -1,26 +1,54 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
-
-const GEOCODE_ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json';
+import Map from './Map';
+import { geocode } from '../domain/Geocoder';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    // defaultの状態
     this.state = {
+      location: {
+        lat: 35.66232,
+        lng: 139.58506,
+      },
     };
   }
 
+  setErrorMessage(message) {
+    this.setState({
+      address: message,
+      location: {
+        lat: 0,
+        lng: 0,
+      },
+    });
+  }
+
   handlePlaceSubmit(place) {
-    axios
-      .get(GEOCODE_ENDPOINT, { params: { address: place } })
-      .then((res) => {
-        console.log(res);
+    geocode(place)
+      .then(({ status, address, location }) => {
+        switch (status) {
+          case 'OK': {
+            this.setState({
+              address, location,
+            });
+            break;
+          }
+          case 'ZERO_RESULTS': {
+            this.setErrorMessage('結果がみつかりません');
+            break;
+          }
+          default: {
+            this.setErrorMessage('APIのエラー');
+            break;
+          }
+        }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        this.setErrorMessage('axiosのエラー');
       });
   }
 
@@ -31,8 +59,10 @@ class App extends Component {
         <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
         <GeocodeResult
           address={this.state.address}
-          lat={this.state.lat}
-          lng={this.state.lng}
+          location={this.state.location}
+        />
+        <Map
+          location={this.state.location}
         />
       </div>
     );
