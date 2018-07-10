@@ -1,13 +1,13 @@
 import axios from 'axios';
+import env from '../config/env';
 
 const GEOCODE_ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json';
-const API_KEY = '';
 
 export const geocode = (place) => {
   const config = {
     params: {
       address: place,
-      key: API_KEY,
+      key: env.API_KEY,
     },
   };
 
