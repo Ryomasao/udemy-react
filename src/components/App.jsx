@@ -61,41 +61,4 @@ class App extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setErrorMessage('axiosのエラー');
-      });
-  }
-
-  handleSortKeyChange(sortKey) {
-    this.setState({
-      sortKey,
-      hotels: sortedtHotels(this.state.hotels, sortKey),
-    });
-  }
-
-  render() {
-    return (
-      <div className="app">
-        <h1 className="app__title">ほてるたろう</h1>
-        <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
-        <div className="app__result-area">
-          <Map
-            location={this.state.location}
-          />
-          <div className="app__result-right">
-            <GeocodeResult
-              address={this.state.address}
-              location={this.state.location}
-            />
-            <HotelsTable
-              hotels={this.state.hotels}
-              onSort={sortKey => this.handleSortKeyChange(sortKey)}
-              sortKey={this.state.sortKey}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default App;
+        this.setErrorMessage('axiosの�
