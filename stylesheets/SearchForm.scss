@@ -1,0 +1,14 @@
+$search-form__font-size: 24px;
+
+.search-form {
+    text-align: center;
+    margin-bottom: 40px;
+
+    &__input {
+        font-size: $search-form__font-size;
+    }
+
+    &__submit {
+        font-size: $search-form__font-size;
+    }
+}

@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import Map from './Map';
+import HotelsTable from './HotelsTable';
+
 import { geocode } from '../domain/Geocoder';
+import { searchHotelByLocation } from '../domain/HotelRepository';
+
+const sortedtHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
+
 
 class App extends Component {
   constructor(props) {
@@ -14,6 +21,7 @@ class App extends Component {
         lat: 35.66232,
         lng: 139.58506,
       },
+      sortKey: 'price',
     };
   }
 
@@ -35,7 +43,7 @@ class App extends Component {
             this.setState({
               address, location,
             });
-            break;
+            return searchHotelByLocation(location);
           }
           case 'ZERO_RESULTS': {
             this.setErrorMessage('結果がみつかりません');
@@ -46,24 +54,45 @@ class App extends Component {
             break;
           }
         }
+        return [];
       })
-      .catch(() => {
+      .then((hotels) => {
+        this.setState({ hotels: sortedtHotels(hotels, this.state.sortKey) });
+      })
+      .catch((error) => {
+        console.log(error);
         this.setErrorMessage('axiosのエラー');
       });
+  }
+
+  handleSortKeyChange(sortKey) {
+    this.setState({
+      sortKey,
+      hotels: sortedtHotels(this.state.hotels, sortKey),
+    });
   }
 
   render() {
     return (
       <div className="app">
-        <h1 className="app__title">いどたろう</h1>
+        <h1 className="app__title">ほてるたろう</h1>
         <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
-        <GeocodeResult
-          address={this.state.address}
-          location={this.state.location}
-        />
-        <Map
-          location={this.state.location}
-        />
+        <div className="app__result-area">
+          <Map
+            location={this.state.location}
+          />
+          <div className="app__result-right">
+            <GeocodeResult
+              address={this.state.address}
+              location={this.state.location}
+            />
+            <HotelsTable
+              hotels={this.state.hotels}
+              onSort={sortKey => this.handleSortKeyChange(sortKey)}
+              sortKey={this.state.sortKey}
+            />
+          </div>
+        </div>
       </div>
     );
   }

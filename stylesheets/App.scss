@@ -1,0 +1,16 @@
+.app {
+   width: 1000px; 
+   margin: 0 auto;
+
+   &__title {
+       text-align: center;
+   }
+
+   &__result-area {
+        display: flex;
+   }
+
+   &__result-right {
+       margin-left:20px
+   }
+}
