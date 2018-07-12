@@ -4,10 +4,12 @@ $text-color:#444;
 body {
     background-color: $background-color;
     color:$text-color;
+    margin: 0;
 }
 
 @import 'reset';
 @import 'App';
+@import 'SearchPage';
 @import 'SearchForm';
 @import 'Map';
 @import 'GeocodeResult';
